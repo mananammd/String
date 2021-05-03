@@ -2,10 +2,12 @@
 
 
 MyString::MyString(const char* rawString) {
-    _size = strlen(rawString);
-    _data = new char[_size + 1];
-    strcpy(_data, rawString);
-    _data[_size+1]='\0';
+    if (rawString != nullptr) {
+        _size = strlen(rawString);
+        _data = new char[_size + 1];
+        strcpy(_data, rawString);
+        _data[_size+1]='\0';
+    }
 }
 
 MyString::MyString(const MyString& other) {
@@ -86,12 +88,13 @@ const char& MyString::at(const unsigned int idx) const {
 }
 
 unsigned int MyString::size() const{
-    int sizeLen = 0;
-  /*  while (_data != "\0"){
+    /*int sizeLen = 0;
+    while (_data[sizeLen] != '\0'){
         sizeLen++;
     }
     */
-    return sizeLen;
+
+    return _size;
 }
 
 bool MyString::isEmpty() const {
@@ -101,32 +104,35 @@ bool MyString::isEmpty() const {
 const char* MyString::rawString() const {
     char* newdata = new char[_size + 1];
     strcpy(newdata, _data); //memcpy
-    newdata[_size]='\0';
+    newdata[_size] = '\0';
     return newdata;
 }
 
 unsigned int MyString::find(const MyString& substring, unsigned int pos) {
     int j = 0;
     int needPos = -1;
-    for (int i = pos; i < _size; ++i) {
+    for (int i = pos; i < _size + 1; i++) {
         if (_data[i] == substring[j]) {
             j++;
             if (j == substring._size) {
-                needPos = i - j;
+                needPos = i - j + 1;
                 break;
             }
         }
         else {
             j = 0;
+            if (_data[i] == _data[i - 1]) {
+                j++;
+            }
         }
     }
     if (needPos == -1){
         std::cout << "not find" << "\n";
+        return -1;
     }
     else {
         return needPos;
     }
-    return needPos;
 }
 
 

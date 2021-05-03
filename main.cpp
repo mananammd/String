@@ -58,14 +58,24 @@ int main() {
     }
 
     {
-        MyString exD("816274\0");
-       // std::cout << "at[3] = ";
-        //char at3 = exD.at(3);
-      //  std::cout << at3;
+        MyString exD("816274");
+        std::cout << "at[3] = ";
+        char at3 = exD.at(3);
+        std::cout << at3 << std::endl;
+        std::cout << "[4] = ";
+        std::cout << exD[4] << std::endl;
         std::cout << "sizeexD = ";
         int sizestr = exD.size();
-        std::cout << sizestr;
-
+        std::cout << sizestr << std::endl;
+    }
+    
+    {
+        MyString test("12082002");
+        std::cout << "Is empty? - ";
+        std::cout << test.isEmpty() << std::endl;
+        std::cout << "rawString = ";
+        std::cout << test.rawString() << std::endl;
+        std::cout << "find(20,0) " << test.find("02",0) << std::endl;
 
     }
     
