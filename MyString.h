@@ -1,7 +1,39 @@
 #include <iostream>
 #include <cassert>
-#include <cstdlib>
 #include <cstring>
+#include <exception>
+/*
+class MyException : public std::exception {
+public:
+    virtual const char* what() const noexcept;
+};
+*/
+class MyExceptionInsert : public std::exception {
+private:
+    unsigned int _pos;
+    unsigned int _size;
+public:
+    const char* what() const noexcept;
+    MyExceptionInsert(unsigned int p, unsigned int s);
+};
+
+class MyExceptionAt : public std::exception {
+private:
+    unsigned int _pos;
+    unsigned int _size;
+public:
+    const char* what() const noexcept;
+    MyExceptionAt(unsigned int p, unsigned int s);
+};
+
+class MyExceptionErase : public std::exception {
+private:
+    unsigned int _pos;
+    unsigned int _size;
+public:
+    const char* what() const noexcept;
+    MyExceptionErase(unsigned int p, unsigned int s);
+};
 
 class MyString
 {

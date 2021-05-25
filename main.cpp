@@ -1,6 +1,5 @@
 #include "MyString.h"
 #include <utility>
-#include <assert.h>
 
 
 int main() {
@@ -79,5 +78,28 @@ int main() {
 
     }
     
+    {
+        MyString test("123456123");
+        try {
+            test.insert(20, "12");
+        }
+        catch(std::exception &test) {
+            std::cout << test.what() << "\n";
+        }
+
+        try {
+            test.at(14);
+        }
+        catch(std::exception &test) {
+            std::cout << test.what() << "\n";
+        }
+
+        try {
+            test.erase(15,2);
+        }
+        catch(std::exception &test) {
+            std::cout << test.what() << "\n";
+        }        
+    }
 
 }

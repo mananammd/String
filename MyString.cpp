@@ -1,5 +1,37 @@
 #include "MyString.h"
 
+const char* MyExceptionInsert::what() const noexcept {
+    char* s = new char[256];
+    sprintf(s, "Called insert(%d) on string of size %d", _pos, _size);
+    return s;
+}
+
+MyExceptionInsert::MyExceptionInsert(unsigned int p, unsigned int s) {
+    _pos = p;
+    _size = s;
+}
+const char* MyExceptionAt::what() const noexcept {
+    char* s = new char[256];
+    sprintf(s, "Called at(%d) on string of size %d", _pos, _size);
+    return s;
+}
+
+MyExceptionAt::MyExceptionAt(unsigned int p, unsigned int s) {
+    _pos = p;
+    _size = s;
+}
+
+const char* MyExceptionErase::what() const noexcept {
+    char* s = new char[256];
+    sprintf(s, "Called erase(%d) on string of size %d", _pos, _size);
+    return s;
+}
+
+MyExceptionErase::MyExceptionErase(unsigned int p, unsigned int s) {
+    _pos = p;
+    _size = s;
+}
+
 
 MyString::MyString(const char* rawString) {
     if (rawString != nullptr) {
@@ -50,6 +82,9 @@ void MyString::append(const MyString& appendedString) {
 }
 
 void MyString::insert(unsigned int pos, const MyString& insertedString) {
+    if (pos > size()){
+        throw MyExceptionInsert(pos, _size);    
+    }
     char* buff = new char[_size + insertedString._size];
     memcpy(buff, _data, pos);
     memcpy(buff + pos,insertedString._data, insertedString._size);
@@ -65,6 +100,9 @@ void MyString::clear() {
 }
 
 void MyString::erase(unsigned int pos, unsigned int count) {
+    if (pos > _size) {
+        throw MyExceptionErase(pos, _size);
+    }
     if (count > _size - pos) {
         count = _size - pos;
     }
@@ -78,22 +116,20 @@ void MyString::erase(unsigned int pos, unsigned int count) {
 }
 
 char& MyString::at(const unsigned int idx) {
-    assert(idx < size());
+    if (idx > size()) {    
+        throw MyExceptionAt(idx, _size);
+    }
     return _data[idx];
 }
 
 const char& MyString::at(const unsigned int idx) const {
-    assert(idx < size());
+    if (idx > size()) {    
+        throw MyExceptionAt(idx, _size);
+    }
     return _data[idx];
 }
 
 unsigned int MyString::size() const{
-    /*int sizeLen = 0;
-    while (_data[sizeLen] != '\0'){
-        sizeLen++;
-    }
-    */
-
     return _size;
 }
 
