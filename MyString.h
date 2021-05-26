@@ -2,37 +2,21 @@
 #include <cassert>
 #include <cstring>
 #include <exception>
-/*
+
+enum class Type {
+        at,
+        insert,
+        erase,
+};
+
 class MyException : public std::exception {
-public:
-    virtual const char* what() const noexcept;
-};
-*/
-class MyExceptionInsert : public std::exception {
 private:
     unsigned int _pos;
     unsigned int _size;
+    Type _type;
 public:
     const char* what() const noexcept;
-    MyExceptionInsert(unsigned int p, unsigned int s);
-};
-
-class MyExceptionAt : public std::exception {
-private:
-    unsigned int _pos;
-    unsigned int _size;
-public:
-    const char* what() const noexcept;
-    MyExceptionAt(unsigned int p, unsigned int s);
-};
-
-class MyExceptionErase : public std::exception {
-private:
-    unsigned int _pos;
-    unsigned int _size;
-public:
-    const char* what() const noexcept;
-    MyExceptionErase(unsigned int p, unsigned int s);
+    MyException(unsigned int pos, unsigned int size, Type type);
 };
 
 class MyString

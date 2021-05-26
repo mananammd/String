@@ -1,35 +1,23 @@
 #include "MyString.h"
 
-const char* MyExceptionInsert::what() const noexcept {
+const char* MyException::what() const noexcept {
     char* s = new char[256];
-    sprintf(s, "Called insert(%d) on string of size %d", _pos, _size);
+    if (_type == Type::at) {
+        sprintf(s, "Called at(%d) on string of size %d", _pos, _size);
+    }
+    else if (_type == Type::insert) {
+        sprintf(s, "Called insert(%d) on string of size %d", _pos, _size);
+    }
+    else {
+        sprintf(s, "Called erase(%d) on string of size %d", _pos, _size);
+    }
     return s;
 }
 
-MyExceptionInsert::MyExceptionInsert(unsigned int p, unsigned int s) {
-    _pos = p;
-    _size = s;
-}
-const char* MyExceptionAt::what() const noexcept {
-    char* s = new char[256];
-    sprintf(s, "Called at(%d) on string of size %d", _pos, _size);
-    return s;
-}
-
-MyExceptionAt::MyExceptionAt(unsigned int p, unsigned int s) {
-    _pos = p;
-    _size = s;
-}
-
-const char* MyExceptionErase::what() const noexcept {
-    char* s = new char[256];
-    sprintf(s, "Called erase(%d) on string of size %d", _pos, _size);
-    return s;
-}
-
-MyExceptionErase::MyExceptionErase(unsigned int p, unsigned int s) {
-    _pos = p;
-    _size = s;
+MyException::MyException(unsigned int pos, unsigned int size, Type type) {
+    _pos = pos;
+    _size = size;
+    _type = type;
 }
 
 
@@ -83,7 +71,7 @@ void MyString::append(const MyString& appendedString) {
 
 void MyString::insert(unsigned int pos, const MyString& insertedString) {
     if (pos > size()){
-        throw MyExceptionInsert(pos, _size);    
+        throw MyException(pos, _size, Type::insert);    
     }
     char* buff = new char[_size + insertedString._size];
     memcpy(buff, _data, pos);
@@ -101,7 +89,7 @@ void MyString::clear() {
 
 void MyString::erase(unsigned int pos, unsigned int count) {
     if (pos > _size) {
-        throw MyExceptionErase(pos, _size);
+        throw MyException(pos, _size, Type::erase);
     }
     if (count > _size - pos) {
         count = _size - pos;
@@ -117,14 +105,14 @@ void MyString::erase(unsigned int pos, unsigned int count) {
 
 char& MyString::at(const unsigned int idx) {
     if (idx > size()) {    
-        throw MyExceptionAt(idx, _size);
+        throw MyException(idx, _size, Type::at);
     }
     return _data[idx];
 }
 
 const char& MyString::at(const unsigned int idx) const {
     if (idx > size()) {    
-        throw MyExceptionAt(idx, _size);
+        throw MyException(idx, _size, Type::at);
     }
     return _data[idx];
 }
